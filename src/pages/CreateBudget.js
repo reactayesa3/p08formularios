@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import useDateInput from '../hooks/useDateInput';
 import useTextInput from '../hooks/useTextInput'
 
 export default function CreateBudget() {
@@ -27,12 +28,17 @@ export default function CreateBudget() {
             errorMessages: ['',''],
             valid: true,
             pattern: /.*/i
+        },
+        budgetDate: {
+            label: 'Fecha presupuesto',
+            value: new Date().toISOString().substring(0,10)
         }
     }
 
     const [customerInput, customerValue, isCustomerValid] = useTextInput(inputsData.customer);
     const [cifInput, cifValue, isCifValid] = useTextInput(inputsData.cif);
     const [contactInput, contactValue] = useTextInput(inputsData.contact);
+    const [budgetDateInput, budgetDateValue] = useDateInput(inputsData.budgetDate);
 
     const [isValidForm, setIsValidForm] = useState(false);
 
@@ -46,6 +52,7 @@ export default function CreateBudget() {
             customer: customerValue,
             cif: cifValue,
             contact: contactValue,
+            budgetDate: new Date(budgetDateValue),
         })
     }
 
@@ -67,6 +74,11 @@ export default function CreateBudget() {
                         <div className="row">
                             <div className="col-100">
                                 {contactInput}
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-100">
+                                {budgetDateInput}
                             </div>
                         </div>
                         <div className="row end">
