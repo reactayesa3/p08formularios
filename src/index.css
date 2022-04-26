@@ -329,6 +329,7 @@ select {
 
 .alert {
     color: #FF5A5F;
+    padding-left: 0.5rem;
 }
 
 .valid {
