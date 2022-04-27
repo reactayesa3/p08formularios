@@ -3,6 +3,7 @@ import useDateInput from '../hooks/useDateInput';
 import useNumberInput from '../hooks/useNumberInput';
 import useSelectInput from '../hooks/useSelectInput';
 import useTextInput from '../hooks/useTextInput'
+import formatCurrency from '../utils/formatCurrency';
 
 export default function CreateBudget() {
 
@@ -58,7 +59,19 @@ export default function CreateBudget() {
     const [amountInput, amountValue] = useNumberInput(inputsData.amount);
     const [taxInput, taxValue] = useSelectInput(inputsData.tax);
 
+    const [calcFields, setCalcFields] = useState({
+        taxAmount: 0,
+        totalBudget: 0
+    })
+
     const [isValidForm, setIsValidForm] = useState(false);
+
+    useEffect(() => {
+        const taxAmount = amountValue * taxValue;
+        const totalBudget = amountValue + taxAmount;
+        setCalcFields({taxAmount, totalBudget});
+    }, [amountValue, taxValue])
+
 
     useEffect(() => {
         setIsValidForm(isCustomerValid && isCifValid);
@@ -108,6 +121,24 @@ export default function CreateBudget() {
                             <div className="col-50"></div>
                             <div className="col-50">
                                 {taxInput}
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-50"></div>
+                            <div className="col-50">
+                                <label>Importe de IVA</label>
+                                <input type="text"
+                                       readOnly
+                                       value={formatCurrency(calcFields.taxAmount, 'EUR')} />
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-50"></div>
+                            <div className="col-50">
+                                <label>Total presupuesto</label>
+                                <input type="text"
+                                       readOnly
+                                       value={formatCurrency(calcFields.totalBudget, 'EUR')} />
                             </div>
                         </div>
                         <div className="row end">
